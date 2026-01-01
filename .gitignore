@@ -1,0 +1,18 @@
+# Claude Code internal files
+.claude/
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

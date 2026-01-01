@@ -1,0 +1,586 @@
+/* ============================================
+   CSS VARIABLES - Theme System
+   ============================================ */
+
+:root {
+  /* Color Palette - Light Mode */
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-surface: rgba(255, 255, 255, 0.95);
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-hover: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  --bg-input: rgba(255, 255, 255, 0.95);
+
+  /* Text Colors */
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #a0aec0;
+  --text-inverse: #ffffff;
+
+  /* Accent Colors */
+  --accent-primary: #667eea;
+  --accent-secondary: #764ba2;
+  --accent-success: #48bb78;
+  --accent-danger: #f56565;
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.3);
+
+  /* Borders */
+  --border-color: rgba(102, 126, 234, 0.2);
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(255, 255, 255, 0.3);
+  --scrollbar-thumb: rgba(102, 126, 234, 0.4);
+  --scrollbar-thumb-hover: rgba(102, 126, 234, 0.6);
+}
+
+/* Dark Mode Theme */
+:root.dark-mode {
+  --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --bg-surface: rgba(26, 26, 46, 0.95);
+  --bg-card: rgba(30, 30, 50, 0.9);
+  --bg-hover: rgba(40, 40, 70, 0.7);
+  --bg-glass: rgba(30, 30, 50, 0.8);
+  --bg-input: rgba(40, 40, 60, 0.95);
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --text-muted: #4a5568;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.5);
+
+  --scrollbar-track: rgba(0, 0, 0, 0.3);
+  --scrollbar-thumb: rgba(102, 126, 234, 0.5);
+  --scrollbar-thumb-hover: rgba(102, 126, 234, 0.7);
+}
+
+/* ============================================
+   BASE STYLES & RESET
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Main Container - Glassmorphism */
+.app-container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--bg-surface);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+
+.header {
+  padding: 24px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 2px solid var(--border-color);
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-gradient);
+  opacity: 0.8;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remaining-badge {
+  padding: 6px 14px;
+  background: var(--accent-gradient);
+  color: var(--text-inverse);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   DARK MODE TOGGLE
+   ============================================ */
+
+.dark-mode-toggle {
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode-toggle:hover {
+  background: var(--accent-gradient);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.dark-mode-toggle .icon-moon {
+  display: none;
+}
+
+:root.dark-mode .dark-mode-toggle .icon-sun {
+  display: none;
+}
+
+:root.dark-mode .dark-mode-toggle .icon-moon {
+  display: block;
+}
+
+/* ============================================
+   INPUT SECTION
+   ============================================ */
+
+.input-section {
+  padding: 24px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.todo-form {
+  display: flex;
+  gap: 12px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.todo-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+
+.todo-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.add-button {
+  padding: 16px 32px;
+  background: var(--accent-gradient);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.add-button:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.add-button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   FILTER NAVIGATION
+   ============================================ */
+
+.filter-nav {
+  display: flex;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0 12px;
+}
+
+.filter-button {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.filter-button:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.filter-button.active {
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
+}
+
+/* ============================================
+   TODO LIST SECTION
+   ============================================ */
+
+.todo-list-section {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-surface);
+  max-height: 450px;
+}
+
+.todo-list {
+  list-style: none;
+  padding: 12px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  gap: 16px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  opacity: 0.5;
+}
+
+.empty-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.todo-list.has-items .empty-state {
+  display: none;
+}
+
+/* TODO Item */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-md);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.todo-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.todo-item:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateX(4px);
+}
+
+.todo-item:hover::before {
+  opacity: 1;
+}
+
+/* Completed state */
+.todo-item.completed {
+  opacity: 0.6;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Delete animation */
+.todo-item.deleting {
+  animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Checkbox */
+.todo-checkbox {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+/* Text */
+.todo-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-word;
+  transition: all var(--transition-normal);
+}
+
+/* Editing input */
+.todo-edit-input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+}
+
+/* Action buttons */
+.todo-actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.todo-item:hover .todo-actions {
+  opacity: 1;
+}
+
+.todo-action-btn {
+  padding: 8px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all var(--transition-normal);
+}
+
+.todo-action-btn:hover {
+  background: var(--accent-gradient);
+  color: var(--text-inverse);
+  border-color: transparent;
+  transform: scale(1.1);
+}
+
+.edit-btn::before {
+  content: '✏️';
+}
+
+.delete-btn::before {
+  content: '🗑️';
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+  padding: 20px 24px;
+  background: var(--bg-glass);
+  border-top: 1px solid var(--border-color);
+}
+
+.clear-button {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 2px solid var(--accent-danger);
+  border-radius: var(--border-radius-md);
+  color: var(--accent-danger);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.clear-button:hover {
+  background: var(--accent-danger);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.clear-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+.todo-list-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.todo-list-section::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+.todo-list-section::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+.todo-list-section::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 640px) {
+  .app-container {
+    max-width: 100%;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .app-title {
+    font-size: 22px;
+  }
+
+  .header-content {
+    flex-wrap: wrap;
+  }
+
+  .todo-form {
+    flex-direction: column;
+  }
+
+  .add-button {
+    width: 100%;
+  }
+
+  .filter-button {
+    font-size: 12px;
+    padding: 12px 8px;
+  }
+
+  .remaining-badge {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+}

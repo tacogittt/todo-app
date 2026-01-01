@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ダークモード対応のモダンなTODOアプリケーション">
+  <title>TODOアプリ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="app-title">TODOリスト</h1>
+        <div class="header-actions">
+          <span id="remaining-count" class="remaining-badge">0 件の未完了</span>
+          <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="ダークモード切替">
+            <span class="icon-sun">☀️</span>
+            <span class="icon-moon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Input Section -->
+    <section class="input-section">
+      <form id="todo-form" class="todo-form">
+        <input
+          type="text"
+          id="todo-input"
+          class="todo-input"
+          placeholder="今日は何をしますか？"
+          autocomplete="off"
+          aria-label="新しいタスク"
+        >
+        <button type="submit" class="add-button">追加</button>
+      </form>
+    </section>
+
+    <!-- Filter Navigation -->
+    <nav class="filter-nav">
+      <button class="filter-button active" data-filter="all">すべて</button>
+      <button class="filter-button" data-filter="active">進行中</button>
+      <button class="filter-button" data-filter="completed">完了済み</button>
+    </nav>
+
+    <!-- TODO List Section -->
+    <section class="todo-list-section">
+      <ul id="todo-list" class="todo-list" role="list">
+        <!-- Empty state (shown when no todos) -->
+        <li class="empty-state">
+          <span class="empty-icon">📝</span>
+          <p class="empty-message">まだタスクがありません。追加してみましょう！</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Footer Actions -->
+    <footer class="footer">
+      <button id="clear-completed" class="clear-button">完了済みを削除</button>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

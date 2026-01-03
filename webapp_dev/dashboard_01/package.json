@@ -1,0 +1,37 @@
+{
+  "name": "dashboard_01",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@mui/material": "^6.3.0",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/x-data-grid": "^7.23.0",
+    "@mui/x-date-pickers": "^7.23.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "recharts": "^2.15.0",
+    "papaparse": "^5.4.1",
+    "date-fns": "^4.1.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/papaparse": "^5.3.15",
+    "@types/lodash": "^4.17.15",
+    "typescript": "^5",
+    "eslint": "^9",
+    "eslint-config-next": "^15.1.0"
+  }
+}

@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model BlogProject {
+  id        String   @id @default(cuid())
+  title     String
+  theme     String
+  persona   String   // "teacher", "expert", "journalist"
+  tone      String   // "casual", "professional", "academic"
+  status    String   @default("outline") // "outline", "writing", "reviewing", "published"
+
+  outlineItems OutlineItem[]
+  sections     BlogSection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OutlineItem {
+  id        String      @id @default(cuid())
+  projectId String
+  project   BlogProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  heading   String      // "H2" or "H3"
+  title     String
+  order     Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+model BlogSection {
+  id           String      @id @default(cuid())
+  projectId    String
+  project      BlogProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  outlineItemId String?
+  sectionTitle String
+  content      String      @db.Text
+  wordCount    Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+}

@@ -9,7 +9,7 @@ interface WizardProgressProps {
 
 export function WizardProgress({ currentStep, steps }: WizardProgressProps) {
   return (
-    <div className="mb-8">
+    <div className="mb-8" role="progressbar" aria-valuenow={currentStep + 1} aria-valuemin={1} aria-valuemax={steps.length} aria-label="ウィザード進捗">
       <div className="flex justify-between">
         {steps.map((step, index) => (
           <div
@@ -32,6 +32,7 @@ export function WizardProgress({ currentStep, steps }: WizardProgressProps) {
               {index < currentStep ? "✓" : index + 1}
             </div>
             <span className="mt-2 text-sm font-medium">{step.label}</span>
+            <span className="mt-1 text-xs text-muted-foreground text-center max-w-[120px]">{step.description}</span>
           </div>
         ))}
       </div>

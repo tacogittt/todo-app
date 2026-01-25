@@ -6,7 +6,20 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
-import japanize_matplotlib  # 日本語フォント対応
+import matplotlib.font_manager as fm
+
+# 日本語フォント設定（japanize_matplotlibの代替）
+try:
+    # システムに存在する日本語フォントを自動検出
+    japanese_fonts = [f.name for f in fm.fontManager.ttflist if 'JP' in f.name or 'Japan' in f.name or 'Gothic' in f.name or 'Mincho' in f.name]
+    if japanese_fonts:
+        plt.rcParams['font.family'] = japanese_fonts[0]
+    else:
+        # フォールバック: DejaVu Sans（記号は表示可能）
+        plt.rcParams['font.family'] = 'DejaVu Sans'
+    plt.rcParams['axes.unicode_minus'] = False  # マイナス記号の文字化け防止
+except:
+    pass  # フォント設定に失敗してもアプリは動作する
 
 # ページ設定
 st.set_page_config(
@@ -600,7 +613,7 @@ if data_loaded:
         )
         st.plotly_chart(fig, width='stretch')
 
-        # チャート2: セグメント別RFMヒートマップ
+        # チャート2: セグメント別RFMヒートマップ（Plotly版）
         segment_rfm = rfm_data.groupby('顧客セグメント').agg({
             'R_Score': 'mean',
             'F_Score': 'mean',
@@ -611,20 +624,27 @@ if data_loaded:
         # ヒートマップ用にデータを整形
         heatmap_data = segment_rfm.set_index('顧客セグメント')[['R_Score', 'F_Score', 'M_Score']].T
 
-        fig, ax = plt.subplots(figsize=(10, 4))
-        sns.heatmap(
-            heatmap_data,
-            annot=True,
-            fmt='.2f',
-            cmap='RdYlGn',
-            ax=ax,
-            cbar_kws={'label': 'スコア'}
+        # Plotlyでヒートマップを作成
+        fig = go.Figure(data=go.Heatmap(
+            z=heatmap_data.values,
+            x=heatmap_data.columns.tolist(),
+            y=['Recency (最新性)', 'Frequency (頻度)', 'Monetary (金額)'],
+            colorscale='RdYlGn',
+            text=heatmap_data.values,
+            texttemplate='%{text:.2f}',
+            textfont={"size": 12},
+            colorbar=dict(title='スコア')
+        ))
+
+        fig.update_layout(
+            title='セグメント別RFM平均スコア',
+            xaxis_title='顧客セグメント',
+            yaxis_title='指標',
+            height=400,
+            xaxis={'side': 'bottom'}
         )
-        ax.set_title('セグメント別RFM平均スコア')
-        ax.set_ylabel('指標')
-        ax.set_xlabel('顧客セグメント')
-        plt.tight_layout()
-        st.pyplot(fig)
+
+        st.plotly_chart(fig, width='stretch')
 
         # チャート3: セグメント別顧客数と売上
         col1, col2 = st.columns(2)
@@ -814,7 +834,7 @@ if data_loaded:
 
             st.plotly_chart(fig, width='stretch')
 
-        # 地域×カテゴリーのヒートマップ（万円単位）
+        # 地域×カテゴリーのヒートマップ（Plotly版、万円単位）
         st.subheader("🌡️ 地域×カテゴリーのヒートマップ")
 
         pivot_data = filtered_df.pivot_table(
@@ -827,19 +847,27 @@ if data_loaded:
         # 万円単位に変換
         pivot_data = pivot_data / 10000
 
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.heatmap(
-            pivot_data,
-            annot=True,
-            fmt='.1f',
-            cmap='YlOrRd',
-            ax=ax,
-            cbar_kws={'label': '購入金額 (万円)'}
-        )
-        ax.set_title('地域×カテゴリーの購入金額ヒートマップ')
-        plt.tight_layout()
+        # Plotlyでヒートマップを作成
+        fig = go.Figure(data=go.Heatmap(
+            z=pivot_data.values,
+            x=pivot_data.columns.tolist(),
+            y=pivot_data.index.tolist(),
+            colorscale='YlOrRd',
+            text=pivot_data.values,
+            texttemplate='%{text:.1f}',
+            textfont={"size": 10},
+            colorbar=dict(title='購入金額<br>(万円)')
+        ))
 
-        st.pyplot(fig)
+        fig.update_layout(
+            title='地域×カテゴリーの購入金額ヒートマップ',
+            xaxis_title='購入カテゴリー',
+            yaxis_title='地域',
+            height=500,
+            xaxis={'side': 'bottom'}
+        )
+
+        st.plotly_chart(fig, width='stretch')
 
     # 年齢層別分析
     if show_age:

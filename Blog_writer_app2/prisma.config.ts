@@ -1,4 +1,4 @@
-import { defineConfig } from 'prisma/config';
+import { defineConfig } from 'prisma/config'
 
 export default defineConfig({
   datasources: {
@@ -7,4 +7,4 @@ export default defineConfig({
       directUrl: process.env.DIRECT_URL,
     },
   },
-});
+})

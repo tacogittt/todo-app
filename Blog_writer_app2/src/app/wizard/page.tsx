@@ -4,7 +4,8 @@ import { useState } from "react"
 import { WizardProgress } from "@/components/wizard/WizardProgress"
 import { ThemeStep } from "@/components/wizard/steps/ThemeStep"
 import { OutlineStep } from "@/components/wizard/steps/OutlineStep"
-import { PersonaType, ToneType } from "@/types/blog"
+import { WritingStep } from "@/components/wizard/steps/WritingStep"
+import { PersonaType, ToneType, OutlineItem } from "@/types/blog"
 
 const WIZARD_STEPS = [
   { label: "テーマ設定", description: "テーマとペルソナを決める" },
@@ -16,6 +17,7 @@ const WIZARD_STEPS = [
 export default function WizardPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [projectId, setProjectId] = useState<string | null>(null)
+  const [outlineItems, setOutlineItems] = useState<OutlineItem[]>([])
 
   const handleThemeComplete = async (data: {
     theme: string
@@ -32,6 +34,11 @@ export default function WizardPage() {
     setCurrentStep(1)
   }
 
+  const handleOutlineComplete = (items: OutlineItem[]) => {
+    setOutlineItems(items)
+    setCurrentStep(2)
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <WizardProgress currentStep={currentStep} steps={WIZARD_STEPS} />
@@ -41,11 +48,18 @@ export default function WizardPage() {
         {currentStep === 1 && projectId && (
           <OutlineStep
             projectId={projectId}
-            onNext={() => setCurrentStep(2)}
+            onNext={handleOutlineComplete}
             onBack={() => setCurrentStep(0)}
           />
         )}
-        {currentStep === 2 && <div>Step 3: 執筆</div>}
+        {currentStep === 2 && projectId && (
+          <WritingStep
+            projectId={projectId}
+            outlineItems={outlineItems}
+            onNext={() => setCurrentStep(3)}
+            onBack={() => setCurrentStep(1)}
+          />
+        )}
         {currentStep === 3 && <div>Step 4: 公開</div>}
       </div>
     </div>

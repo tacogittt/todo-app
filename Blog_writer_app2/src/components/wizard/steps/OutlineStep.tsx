@@ -9,7 +9,7 @@ import { Loader2, RefreshCw } from "lucide-react"
 
 interface OutlineStepProps {
   projectId: string
-  onNext: () => void
+  onNext: (items: OutlineItem[]) => void
   onBack: () => void
 }
 
@@ -84,7 +84,7 @@ export function OutlineStep({ projectId, onNext, onBack }: OutlineStepProps) {
         <Button variant="outline" onClick={onBack}>
           戻る
         </Button>
-        <Button onClick={onNext} disabled={items.length === 0}>
+        <Button onClick={() => onNext(items)} disabled={items.length === 0}>
           次へ: 執筆する
         </Button>
       </div>

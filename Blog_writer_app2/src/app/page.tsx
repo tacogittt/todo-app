@@ -1,39 +1,23 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center p-8">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Blog Writer App</CardTitle>
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">ブログ執筆アシスタント</CardTitle>
           <CardDescription>
-            shadcn/ui コンポーネントのセットアップが完了しました
+            AIと一緒に、質の高いブログ記事を作成しましょう
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
-            以下のコンポーネントが利用可能です:
-          </p>
-          <ul className="list-disc list-inside space-y-2 text-sm">
-            <li>Button</li>
-            <li>Input</li>
-            <li>Card</li>
-            <li>Textarea</li>
-            <li>Select</li>
-            <li>Tabs</li>
-            <li>Progress</li>
-            <li>Scroll Area</li>
-            <li>Dialog</li>
-            <li>Alert Dialog</li>
-            <li>Avatar</li>
-            <li>Dropdown Menu</li>
-          </ul>
-          <div className="pt-4">
-            <Button>サンプルボタン</Button>
-          </div>
+        <CardContent className="flex justify-center">
+          <Link href="/wizard">
+            <Button size="lg">新しい記事を作成</Button>
+          </Link>
         </CardContent>
       </Card>
-    </div>
-  );
+    </main>
+  )
 }

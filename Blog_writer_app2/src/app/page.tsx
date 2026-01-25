@@ -2,6 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
+export const metadata = {
+  title: "ブログ執筆アシスタント",
+  description: "AIと一緒に、質の高いブログ記事を作成しましょう",
+}
+
 export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted">

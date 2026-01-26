@@ -5,13 +5,14 @@ import { WizardProgress } from "@/components/wizard/WizardProgress"
 import { ThemeStep } from "@/components/wizard/steps/ThemeStep"
 import { OutlineStep } from "@/components/wizard/steps/OutlineStep"
 import { WritingStep } from "@/components/wizard/steps/WritingStep"
+import { ReviewStep } from "@/components/wizard/steps/ReviewStep"
 import { PersonaType, ToneType, OutlineItem } from "@/types/blog"
 
 const WIZARD_STEPS = [
   { label: "テーマ設定", description: "テーマとペルソナを決める" },
   { label: "構成設計", description: "目次を作成する" },
   { label: "執筆", description: "セクションを執筆する" },
-  { label: "公開", description: "校正して公開する" },
+  { label: "プレビュー", description: "確認してエクスポート" },
 ]
 
 export default function WizardPage() {
@@ -60,7 +61,9 @@ export default function WizardPage() {
             onBack={() => setCurrentStep(1)}
           />
         )}
-        {currentStep === 3 && <div>Step 4: 公開</div>}
+        {currentStep === 3 && projectId && (
+          <ReviewStep projectId={projectId} onBack={() => setCurrentStep(2)} />
+        )}
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { OutlineStep } from "@/components/wizard/steps/OutlineStep"
 import { WritingStep } from "@/components/wizard/steps/WritingStep"
 import { ReviewStep } from "@/components/wizard/steps/ReviewStep"
 import { PersonaType, ToneType, OutlineItem } from "@/types/blog"
+import { logger } from "@/lib/logger"
 
 const WIZARD_STEPS = [
   { label: "テーマ設定", description: "テーマとペルソナを決める" },
@@ -25,14 +26,30 @@ export default function WizardPage() {
     persona: PersonaType
     tone: ToneType
   }) => {
-    const res = await fetch("/api/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-    const project = await res.json()
-    setProjectId(project.id)
-    setCurrentStep(1)
+    logger.debug("=== Layer 1: handleThemeComplete called ===", data)
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+      logger.debug("=== Layer 2: API response status ===", res.status)
+
+      if (!res.ok) {
+        const errorText = await res.text()
+        logger.error("=== API Error ===", errorText)
+        alert(`エラー: ${errorText}`)
+        return
+      }
+
+      const project = await res.json()
+      logger.debug("=== Layer 3: Project created ===", project)
+      setProjectId(project.id)
+      setCurrentStep(1)
+    } catch (error) {
+      logger.error("=== Fetch Error ===", error)
+      alert(`通信エラー: ${error}`)
+    }
   }
 
   const handleOutlineComplete = (items: OutlineItem[]) => {

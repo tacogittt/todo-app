@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { anthropic, CLAUDE_MODEL } from "@/lib/claude"
 import { getOutlinePrompt } from "@/lib/prompts/outline"
+import { logger } from "@/lib/logger"
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -31,23 +32,32 @@ export async function POST(
       throw new Error("Unexpected response type")
     }
 
-    const result = JSON.parse(content.text)
+    // Claudeがmarkdown形式で返す場合があるため、```json ... ```を取り除く
+    let jsonText = content.text.trim()
+    const codeBlockMatch = jsonText.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/)
+    if (codeBlockMatch) {
+      jsonText = codeBlockMatch[1].trim()
+    }
+
+    const result = JSON.parse(jsonText)
 
     // 既存の目次を削除して新規作成
     await prisma.outlineItem.deleteMany({ where: { projectId: id } })
 
-    const outlineItems = await Promise.all(
-      result.outline.map((item: { heading: string; title: string }, index: number) =>
-        prisma.outlineItem.create({
-          data: {
-            projectId: id,
-            heading: item.heading,
-            title: item.title,
-            order: index,
-          },
-        })
-      )
-    )
+    // 並列処理ではなく順次処理に変更（Prisma Postgresの接続制限対策）
+    const outlineItems = []
+    for (let index = 0; index < result.outline.length; index++) {
+      const item = result.outline[index]
+      const created = await prisma.outlineItem.create({
+        data: {
+          projectId: id,
+          heading: item.heading,
+          title: item.title,
+          order: index,
+        },
+      })
+      outlineItems.push(created)
+    }
 
     // タイトルを更新
     await prisma.blogProject.update({
@@ -57,7 +67,7 @@ export async function POST(
 
     return NextResponse.json({ title: result.title, outline: outlineItems })
   } catch (error) {
-    console.error("Outline generation error:", error)
+    logger.error("Outline generation error:", error)
     return NextResponse.json(
       { error: "目次の生成に失敗しました" },
       { status: 500 }

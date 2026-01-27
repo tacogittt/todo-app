@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { OutlineEditor } from "@/components/wizard/OutlineEditor"
@@ -17,6 +17,7 @@ export function OutlineStep({ projectId, onNext, onBack }: OutlineStepProps) {
   const [items, setItems] = useState<OutlineItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [title, setTitle] = useState("")
+  const lastProjectIdRef = useRef<string | null>(null)
 
   const generateOutline = async () => {
     setIsLoading(true)
@@ -24,18 +25,30 @@ export function OutlineStep({ projectId, onNext, onBack }: OutlineStepProps) {
       const res = await fetch(`/api/projects/${projectId}/outline`, {
         method: "POST",
       })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || "目次の生成に失敗しました")
+      }
+
       const data = await res.json()
-      setTitle(data.title)
-      setItems(data.outline)
+      setTitle(data.title || "")
+      setItems(data.outline || [])
     } catch (error) {
       console.error("Failed to generate outline:", error)
+      alert(`目次生成エラー: ${error}`)
+      setItems([]) // エラー時は空配列を設定
     } finally {
       setIsLoading(false)
     }
   }
 
   useEffect(() => {
+    // 同じprojectIdでの2重実行を防ぐ（React Strict Mode対策）
+    if (lastProjectIdRef.current === projectId) return
+    lastProjectIdRef.current = projectId
     generateOutline()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId])
 
   return (

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { logger } from "@/lib/logger"
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -25,7 +26,7 @@ export async function GET(
 
     return NextResponse.json(project)
   } catch (error) {
-    console.error("Failed to fetch project:", error)
+    logger.error("Failed to fetch project:", error)
     return NextResponse.json(
       { error: "プロジェクトの取得に失敗しました" },
       { status: 500 }

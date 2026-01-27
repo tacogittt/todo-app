@@ -2,6 +2,7 @@ import { NextRequest } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { anthropic, CLAUDE_MODEL } from "@/lib/claude"
 import { getSectionPrompt } from "@/lib/prompts/section"
+import { logger } from "@/lib/logger"
 
 export async function POST(
   req: NextRequest,
@@ -76,6 +77,7 @@ export async function POST(
           )
         )
       } catch (error) {
+        logger.error("Section generation error:", error)
         controller.enqueue(
           encoder.encode(
             `data: ${JSON.stringify({

@@ -12,17 +12,19 @@ abstract class ComponentTestCase extends TestCase
     /**
      * Render a Blade component and return the HTML
      */
-    protected function renderComponent(string $component, array $attributes = []): string
+    protected function renderComponent(string $component, array $attributes = [], string $slot = ''): string
     {
         $attributeString = collect($attributes)
             ->map(fn($value, $key) => is_bool($value)
                 ? ($value ? $key : '')
-                : sprintf('%s="%s"', $key, $value)
+                : sprintf('%s="%s"', $key, htmlspecialchars($value))
             )
             ->filter()
             ->implode(' ');
 
-        return view('components.' . $component, $attributes)->render();
+        $bladeTemplate = "<x-{$component} {$attributeString}>{$slot}</x-{$component}>";
+
+        return \Illuminate\Support\Facades\Blade::render($bladeTemplate, $attributes);
     }
 
     /**

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -6,6 +7,129 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    /* Material Design 3 Color System */
+    --color-primary: #6750A4;
+    --color-on-primary: #FFFFFF;
+    --color-primary-container: #EADDFF;
+    --color-on-primary-container: #21005D;
+
+    --color-secondary: #625B71;
+    --color-on-secondary: #FFFFFF;
+    --color-secondary-container: #E8DEF8;
+    --color-on-secondary-container: #1D192B;
+
+    --color-tertiary: #7D5260;
+    --color-on-tertiary: #FFFFFF;
+    --color-tertiary-container: #FFD8E4;
+    --color-on-tertiary-container: #31111D;
+
+    --color-error: #B3261E;
+    --color-on-error: #FFFFFF;
+    --color-error-container: #F9DEDC;
+    --color-on-error-container: #410E0B;
+
+    --color-background: #FEF7FF;
+    --color-on-background: #1D1B20;
+
+    --color-surface: #FEF7FF;
+    --color-on-surface: #1D1B20;
+    --color-surface-variant: #E7E0EC;
+    --color-on-surface-variant: #49454F;
+
+    --color-outline: #79747E;
+    --color-outline-variant: #CAC4D0;
+
+    --color-inverse-surface: #322F35;
+    --color-inverse-on-surface: #F5EFF7;
+    --color-inverse-primary: #D0BCFF;
+
+    /* Font Family */
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Material Design Typography Scale */
+    --font-size-display-large: 57px;
+    --line-height-display-large: 64px;
+    --font-weight-display-large: 400;
+
+    --font-size-display-medium: 45px;
+    --line-height-display-medium: 52px;
+    --font-weight-display-medium: 400;
+
+    --font-size-display-small: 36px;
+    --line-height-display-small: 44px;
+    --font-weight-display-small: 400;
+
+    --font-size-headline-large: 32px;
+    --line-height-headline-large: 40px;
+    --font-weight-headline-large: 400;
+
+    --font-size-headline-medium: 28px;
+    --line-height-headline-medium: 36px;
+    --font-weight-headline-medium: 400;
+
+    --font-size-headline-small: 24px;
+    --line-height-headline-small: 32px;
+    --font-weight-headline-small: 400;
+
+    --font-size-title-large: 22px;
+    --line-height-title-large: 28px;
+    --font-weight-title-large: 400;
+
+    --font-size-title-medium: 16px;
+    --line-height-title-medium: 24px;
+    --font-weight-title-medium: 500;
+
+    --font-size-title-small: 14px;
+    --line-height-title-small: 20px;
+    --font-weight-title-small: 500;
+
+    --font-size-body-large: 16px;
+    --line-height-body-large: 24px;
+    --font-weight-body-large: 400;
+
+    --font-size-body-medium: 14px;
+    --line-height-body-medium: 20px;
+    --font-weight-body-medium: 400;
+
+    --font-size-body-small: 12px;
+    --line-height-body-small: 16px;
+    --font-weight-body-small: 400;
+
+    --font-size-label-large: 14px;
+    --line-height-label-large: 20px;
+    --font-weight-label-large: 500;
+
+    --font-size-label-medium: 12px;
+    --line-height-label-medium: 16px;
+    --font-weight-label-medium: 500;
+
+    --font-size-label-small: 11px;
+    --line-height-label-small: 16px;
+    --font-weight-label-small: 500;
+
+    /* Material Design 4dp Grid - Spacing */
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-8: 32px;
+    --spacing-10: 40px;
+    --spacing-12: 48px;
+    --spacing-16: 64px;
+
+    /* Border Radius */
+    --radius-none: 0px;
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 28px;
+    --radius-full: 9999px;
+
+    /* Minimum Touch Target Size (Android) */
+    --min-height-touch: 44px;
+    --min-width-touch: 44px;
 }

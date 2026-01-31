@@ -1,59 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 習慣化支援PWAアプリ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Material Design 3を採用した習慣トラッキングPWAアプリ（Android対応）
 
-## About Laravel
+## 技術スタック
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **バックエンド**: Laravel 12 + PHP 8.3
+- **データベース**: SQLite
+- **フロントエンド**: Tailwind CSS + Material Design 3
+- **PWA**: laravelpwa
+- **テスト**: PHPUnit（TDD方式）
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 特徴
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+✅ Material Design 3準拠のUIコンポーネント
+✅ PWA対応（ホーム画面への追加可能）
+✅ レスポンシブデザイン
+✅ TDDで開発された再利用可能なコンポーネント
+✅ Android実機で動作確認済み
 
-## Learning Laravel
+## セットアップ
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 必要要件
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.3+
+- Composer 2.x
+- Node.js 18+
+- NPM
 
-## Laravel Sponsors
+### インストール
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# 依存関係のインストール
+composer install
+npm install
 
-### Premium Partners
+# 環境設定
+cp .env.example .env
+php artisan key:generate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# データベース準備
+touch database/database.sqlite
+php artisan migrate
 
-## Contributing
+# アセットビルド
+npm run build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 開発サーバー起動
 
-## Code of Conduct
+```bash
+# フロントエンドのビルド（開発モード）
+npm run dev
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Laravelサーバー起動
+php artisan serve
+```
 
-## Security Vulnerabilities
+http://localhost:8000 でアクセス
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Android実機テスト
 
-## License
+### WiFi経由でのテスト
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. PCのIPアドレスを確認:
+   ```bash
+   ipconfig
+   ```
+
+2. Laravelサーバーを外部アクセス可能で起動:
+   ```bash
+   php artisan serve --host=0.0.0.0
+   ```
+
+3. Android端末とPCを同じWiFiに接続
+
+4. Android ChromeでアクセスしてPWAインストール:
+   ```
+   http://[PCのIPアドレス]:8000
+   ```
+
+### PWA機能確認
+
+- ✅ ホーム画面への追加
+- ✅ Material Designテーマカラー
+- ✅ オフライン対応（Service Worker）
+- ⚠️ スタンドアロン表示（HTTPS環境で完全動作）
+
+## コンポーネント
+
+### 基礎コンポーネント
+
+- `<x-button>` - Material Design ボタン（filled/outlined/text）
+- `<x-card>` - カード（elevated/filled/outlined）
+- `<x-input>` - テキストフィールド
+
+### アプリ固有コンポーネント
+
+- `<x-habit-card>` - 習慣トラッキングカード（ストリーク表示付き）
+- `<x-app-bar>` - アプリバー
+
+## テスト
+
+```bash
+# 全テスト実行
+php artisan test
+
+# コンポーネントテストのみ
+php artisan test --filter Components
+```
+
+## プロジェクト構成
+
+```
+PWA_app/
+├── app/
+│   └── Http/Controllers/
+│       └── HabitController.php
+├── resources/
+│   ├── css/
+│   │   └── app.css
+│   └── views/
+│       ├── components/
+│       │   ├── app-bar.blade.php
+│       │   ├── button.blade.php
+│       │   ├── card.blade.php
+│       │   ├── habit-card.blade.php
+│       │   └── input.blade.php
+│       └── home.blade.php
+├── tests/
+│   └── Feature/
+│       └── Components/
+│           ├── ComponentTestCase.php
+│           ├── AppBarComponentTest.php
+│           ├── ButtonComponentTest.php
+│           ├── CardComponentTest.php
+│           ├── HabitCardComponentTest.php
+│           └── InputComponentTest.php
+├── docs/
+│   └── plans/
+│       └── 2026-01-31-material-design-pwa-implementation.md
+├── config/
+│   └── laravelpwa.php
+└── tailwind.config.js
+```
+
+## 実装済み機能
+
+- ✅ Material Design 3コンポーネントライブラリ
+- ✅ PWA基盤（manifest.json, Service Worker）
+- ✅ レスポンシブUIデザイン
+- ✅ 習慣リスト表示
+- ✅ ストリーク（連続日数）バッジ
+- ✅ 完了状態の視覚表現
+
+## 今後の拡張予定
+
+1. **データベース統合**
+   - Habitモデルとマイグレーション
+   - データの永続化
+
+2. **CRUD操作**
+   - 習慣の追加・編集・削除
+   - チェックボックスの機能実装
+
+3. **高度なPWA機能**
+   - Webプッシュ通知
+   - App Badge API統合
+   - 完全なオフライン対応
+
+4. **統計機能**
+   - カレンダービュー
+   - 進捗トラッキング
+   - 達成率の可視化
+
+## 開発方針
+
+このプロジェクトはTDD（テスト駆動開発）で構築されています：
+1. テストを先に書く（Red）
+2. 実装してテストをパスさせる（Green）
+3. リファクタリング（Refactor）
+
+すべてのコンポーネントにはPHPUnitテストが含まれています。
+
+## ライセンス
+
+MIT
+
+## 参考資料
+
+- [Material Design 3](https://m3.material.io/)
+- [Laravel Documentation](https://laravel.com/docs)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [laravelpwa](https://github.com/ladumor/laravel-pwa)

@@ -123,7 +123,11 @@ class _RootScreenState extends State<_RootScreen> {
   void _onVmUpdate() {
     final vm = _vm;
     if (vm == null) return;
-    if (!vm.isPlaying && vm.timerState == TimerState.completed) {
+    // completed: タイマー満了 / idle: ヘッドホン切断等による中断
+    // どちらの場合も _endSession でWakelock解除・画面復帰を行う
+    if (!vm.isPlaying &&
+        (vm.timerState == TimerState.completed ||
+            vm.timerState == TimerState.idle)) {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => _endSession());
     }

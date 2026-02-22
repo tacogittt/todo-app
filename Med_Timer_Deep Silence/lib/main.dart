@@ -104,17 +104,20 @@ class _RootScreenState extends State<_RootScreen> {
   }
 
   Future<void> _startSession(AppSettings settings) async {
-    if (settings.immersiveModeEnabled) {
-      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    }
-    await WakelockPlus.enable();
+    if (_vm != null) return; // 二重起動ガード: WAV読込中の再押下を防ぐ
 
+    // セッション画面を即座に表示（最初のawaitより前で同期的に実行）
     final vm =
         SessionViewModel(audioService: AudioService(), settings: settings);
     vm.addListener(_onVmUpdate);
     setState(() => _vm = vm);
-    await vm.startSession();
     if (mounted) context.read<_AppState>().setPlaying(true);
+
+    if (settings.immersiveModeEnabled) {
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+    await WakelockPlus.enable();
+    await vm.startSession();
   }
 
   void _onVmUpdate() {
@@ -152,7 +155,7 @@ class _RootScreenState extends State<_RootScreen> {
       final settings = appState.settings;
       final bgColor = settings.noiseType == NoiseType.brown
           ? const Color(0xFF1A120B)
-          : const Color(0xFF0A2647);
+          : const Color(0xFF071A0B);
       return ListenableBuilder(
         listenable: _vm!,
         builder: (_, __) => SessionScreen(
@@ -173,9 +176,11 @@ class _RootScreenState extends State<_RootScreen> {
       onOpenSettings: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => SettingsScreen(
-            settings: appState.settings,
-            onChanged: (s) => appState.updateSettings(s),
+          builder: (_) => Consumer<_AppState>(
+            builder: (_, state, __) => SettingsScreen(
+              settings: state.settings,
+              onChanged: state.updateSettings,
+            ),
           ),
         ),
       ),

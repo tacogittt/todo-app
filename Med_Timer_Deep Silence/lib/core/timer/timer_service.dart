@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier, visibleForTesting;
 
 enum TimerState { idle, playing, fading, completed }
 

@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
 
   Color get _bgColor => settings.noiseType == NoiseType.brown
       ? const Color(0xFF1A120B)
-      : const Color(0xFF0A2647);
+      : const Color(0xFF071A0B);
 
   @override
   Widget build(BuildContext context) {

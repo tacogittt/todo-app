@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:deep_silence/core/audio/audio_service.dart';
 import 'package:deep_silence/core/timer/timer_service.dart';
@@ -9,6 +10,7 @@ class SessionViewModel extends ChangeNotifier {
   late final TimerService _timer;
 
   bool _isPlaying = false;
+  StreamSubscription<void>? _unexpectedStopSubscription;
 
   bool get isPlaying => _isPlaying;
   Duration get remaining => _timer.remaining;
@@ -28,17 +30,36 @@ class SessionViewModel extends ChangeNotifier {
   }
 
   Future<void> startSession() async {
-    await audioService.loadAndLoop(settings.noiseType);
-    await audioService.play();
+    // タイマーを即時開始（音声読み込みより先に）
+    // setAsset() がオーディオセッション確立まで返らない場合があるため
     _timer.start();
     _isPlaying = true;
     notifyListeners();
+    await audioService.loadAndLoop(settings.noiseType);
+    await audioService.play();
+    // play() 呼び出し後にストリームを購読（初期状態は playing=true のため誤検知しない）
+    _unexpectedStopSubscription =
+        audioService.unexpectedStopStream.listen((_) {
+      _handleAudioInterruption();
+    });
   }
 
   Future<void> stopSession() async {
+    // 購読を先にキャンセルしてから stop() を呼ぶことで
+    // 意図的な停止が _handleAudioInterruption を起動しないようにする
+    _unexpectedStopSubscription?.cancel();
+    _unexpectedStopSubscription = null;
+    _isPlaying = false;
     _timer.stop();
     await audioService.stop();
+    notifyListeners();
+  }
+
+  void _handleAudioInterruption() {
+    _unexpectedStopSubscription?.cancel();
+    _unexpectedStopSubscription = null;
     _isPlaying = false;
+    _timer.stop();
     notifyListeners();
   }
 
@@ -48,14 +69,18 @@ class SessionViewModel extends ChangeNotifier {
       audioService.setVolume(volume);
     }
     if (_timer.state == TimerState.completed) {
-      audioService.stop();
+      // 購読を先にキャンセルしてから stop() を呼ぶ
+      _unexpectedStopSubscription?.cancel();
+      _unexpectedStopSubscription = null;
       _isPlaying = false;
+      audioService.stop();
     }
     notifyListeners();
   }
 
   @override
   void dispose() {
+    _unexpectedStopSubscription?.cancel();
     _timer.removeListener(_onTimerTick);
     _timer.dispose();
     audioService.dispose();

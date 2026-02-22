@@ -28,14 +28,14 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         children: [
-          _Header('タイマー設定'),
+          const _Header('タイマー設定'),
           _FadeSlider(
             value: settings.fadeDurationMinutes,
             onChanged: (v) =>
                 onChanged(settings.copyWith(fadeDurationMinutes: v)),
           ),
           const SizedBox(height: 32),
-          _Header('演出設定'),
+          const _Header('演出設定'),
           _ToggleRow(
             label: '呼吸アニメーション',
             description: '背景の微細な明滅',
